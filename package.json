@@ -1,0 +1,27 @@
+{
+  "name": "rest-api-jwt",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ./bin/www.js",
+    "dev": "nodemon -r dotenv/config ./bin/www.js",
+    "dbcreateproductstable": "node  -r dotenv/config ./db/scripts/products/createProductsTable.js",
+    "dbpopulateproductstable": "node -r dotenv/config ./db/scripts/products/populateProductsTable.js",
+    "dbemptyproductstable": "node -r dotenv/config ./db/scripts/products/emptyProductsTable.js",
+    "dbdeleteproductstable": "node -r dotenv/config ./db/scripts/products/deleteProductsTable.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-oauth2-jwt-bearer": "^1.1.0",
+    "morgan": "~1.9.1",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "dotenv": "^14.3.2",
+    "nodemon": "^1.11.1"
+  }
+}
