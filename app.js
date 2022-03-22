@@ -33,7 +33,7 @@ app.use('/products', checkJwt, productsRouter);
 //Error handlers
 
 //Not found error (404)
-app.use(function (req, res) {
+app.use(function (req, res, next) {
   res.status(404).json({
     error: {
       code: 404,

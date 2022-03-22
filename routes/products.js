@@ -1,6 +1,10 @@
 import express from 'express';
 const router = express.Router();
-import { getAllProducts, getProductByID } from '../models/products.js';
+import {
+  getAllProducts,
+  getProductByID,
+  createUser,
+} from '../models/products.js';
 import { requiredScopes } from 'express-oauth2-jwt-bearer';
 
 // GET ALL PRODUCTS
@@ -17,6 +21,16 @@ router.get(`/:id`, requiredScopes('read:products'), async function (req, res) {
   const resultbyId = await getProductByID(id);
   //Return the response
   res.json(resultbyId);
+});
+
+//ADD A NEW PRODUCT
+router.post(`/`, requiredScopes('read:products'), async function (req, res) {
+  //Get the body from the params
+  const postBody = req.body;
+  //Call the function to add the new user
+  const newUser = await createUser(postBody);
+  //Return the response
+  res.json(newUser);
 });
 
 export default router;
