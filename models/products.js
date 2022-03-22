@@ -7,13 +7,9 @@ export async function getAllProducts() {
   return responseHandler(true, data.rows);
 }
 
-export async function getMeals() {
-  const data = await query(`SELECT * FROM  products WHERE category='meals';`);
-  return responseHandler(true, data.rows);
-}
-
-export async function getDrinks() {
-  const data = await query(`SELECT * FROM  products WHERE category='drinks';`);
+export async function getProductByID(id) {
+  const sqlString = `SELECT * FROM  products WHERE id=$1`;
+  const data = await query(sqlString, [id]);
   return responseHandler(true, data.rows);
 }
 
