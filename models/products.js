@@ -1,19 +1,27 @@
-// GET ALL USERS
 import query from '../db/index.js';
 
+// GET ALL PRODUCTS
 export async function getAllProducts() {
   //Return all the products
   const data = await query(`SELECT * FROM  products;`);
   return responseHandler(true, data.rows);
 }
 
+// GET PRODUCT BY ID
 export async function getProductByID(id) {
-  const sqlString = `SELECT * FROM  products WHERE id=$1`;
-  const data = await query(sqlString, [id]);
-  return responseHandler(true, data.rows);
+  //Convert the id into a Number
+  const numericId = Number(id);
+  //Check if the converted ID is diferent to an integer
+  if (Number.isNaN(numericId)) {
+    return responseHandler(false, notValidId);
+  } else {
+    const sqlString = `SELECT * FROM  products WHERE id=$1`;
+    const data = await query(sqlString, [id]);
+    return checkIfItemExist(data, id);
+  }
 }
 
-// CREATE A USER
+// CREATE A NEW PRODUCT
 export async function createUser(newUser) {
   //Check if the body is empty
   const CheckbodyIsEmpty = checkBodyObjIsEmpty(newUser);
@@ -52,4 +60,39 @@ function checkBodyObjIsEmpty(body) {
   return Object.keys(body).length === 0 ? true : false;
 }
 
-const errorMsgNoBody = `The body can't be empty. An object with the fields: needs to be send as body`;
+function checkIfItemExist(data, id) {
+  return !data.rowCount
+    ? responseHandler(false, notFound(id))
+    : responseHandler(true, data.rows);
+}
+
+//ERROR MSG
+const notFound = (id) => {
+  return {
+    code: 404,
+    status: 'Not found',
+    message: `We couldn't find the product with the id ${id}`,
+  };
+};
+const notValidId = {
+  code: 400,
+  status: 'Not a valid ID',
+  message: 'The product id must be a valid number',
+};
+const errorMsgNoBody = {
+  code: 400,
+  status: `The body can't be empty`,
+  message: `An object with the fields: needs to be send as body`,
+};
+
+//ERROR MSGS ARRAY
+const errorMsgs = [
+  {
+    name: 'notValidId',
+    response: {
+      code: 400,
+      status: 'Not a valid ID',
+      message: 'The product id must be a valid number',
+    },
+  },
+];
