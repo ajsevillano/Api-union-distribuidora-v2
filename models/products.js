@@ -1,27 +1,27 @@
 import query from '../db/index.js';
+import { errorMsgs } from '../data/errorMsg.js';
 
 // GET ALL PRODUCTS
 export async function getAllProducts() {
-  //Return all the products
   const data = await query(`SELECT * FROM  products;`);
   return responseHandler(true, data.rows);
 }
 
 // GET PRODUCT BY ID
 export async function getProductByID(id) {
-  //When we received the id param, we convert it into a Number
   const numericId = Number(id);
-  //If the converted id is not a valid integer,thrown an error
+  //If the converted id is not a valid integer:
   if (Number.isNaN(numericId)) {
-    return responseHandler(false, notValidId);
-  } else {
-    if (numericId < 0 || numericId > 2147483647) {
-      return responseHandler(false, notValidRange);
-    }
-    const sqlString = `SELECT * FROM  products WHERE id=$1`;
-    const data = await query(sqlString, [id]);
-    return checkIfItemExist(data, id);
+    return responseHandler(false, ErrorMsg('notValidId'));
   }
+  //If the id is not between the 0 & max integer value:
+  if (numericId < 0 || numericId > 2147483647) {
+    return responseHandler(false, ErrorMsg('notValidRange'));
+  }
+  //Return DB response
+  const sqlString = `SELECT * FROM  products WHERE id=$1`;
+  const data = await query(sqlString, [id]);
+  return checkIfItemExist(data, id);
 }
 
 // CREATE A NEW PRODUCT
@@ -29,7 +29,7 @@ export async function createUser(newUser) {
   //Check if the body is empty
   const CheckbodyIsEmpty = checkBodyObjIsEmpty(newUser);
   if (CheckbodyIsEmpty) {
-    return responseHandler(false, errorMsgNoBody);
+    return responseHandler(false, ErrorMsg('errorMsgNoBody'));
   }
   //Else
   //Destructuring the body
@@ -50,24 +50,27 @@ export async function createUser(newUser) {
   return responseHandler(true, data.rows);
 }
 
-//RESPONSE HANDLER
-function responseHandler(status, statusMsg) {
+const responseHandler = (status, statusMsg) => {
   return {
     success: status,
     payload: statusMsg,
   };
-}
+};
 
-function checkBodyObjIsEmpty(body) {
-  //Check if the body  sent in the request is empty
+const ErrorMsg = (errorMsg) => {
+  const filterError = errorMsgs.find((error) => error.name === errorMsg);
+  return filterError.response;
+};
+
+const checkBodyObjIsEmpty = (body) => {
   return Object.keys(body).length === 0 ? true : false;
-}
+};
 
-function checkIfItemExist(data, id) {
+const checkIfItemExist = (data, id) => {
   return !data.rowCount
     ? responseHandler(false, notFound(id))
     : responseHandler(true, data.rows);
-}
+};
 
 //ERROR MSG
 const notFound = (id) => {
@@ -77,31 +80,3 @@ const notFound = (id) => {
     message: `We couldn't find the product with the id ${id}`,
   };
 };
-const notValidId = {
-  code: 400,
-  status: 'Not a valid ID',
-  message: 'The product id must be a valid number',
-};
-
-const notValidRange = {
-  code: 400,
-  status: 'Not a valid range',
-  message: 'Not a valid range for the ID',
-};
-const errorMsgNoBody = {
-  code: 400,
-  status: `The body can't be empty`,
-  message: `An object with the fields: needs to be send as body`,
-};
-
-//ERROR MSGS ARRAY
-const errorMsgs = [
-  {
-    name: 'notValidId',
-    response: {
-      code: 400,
-      status: 'Not a valid ID',
-      message: 'The product id must be a valid number',
-    },
-  },
-];
