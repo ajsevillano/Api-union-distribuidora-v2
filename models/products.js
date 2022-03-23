@@ -1,5 +1,10 @@
 import query from '../db/index.js';
-import { errorMsgs } from '../data/errorMsg.js';
+import {
+  responseHandler,
+  ErrorMsg,
+  checkBodyObjIsEmpty,
+  checkIfItemExist,
+} from '../libs/products.js';
 
 // GET ALL PRODUCTS
 export async function getAllProducts() {
@@ -26,17 +31,13 @@ export async function getProductByID(id) {
 
 // CREATE A NEW PRODUCT
 export async function createUser(newUser) {
-  //Check if the body is empty
   const CheckbodyIsEmpty = checkBodyObjIsEmpty(newUser);
   if (CheckbodyIsEmpty) {
     return responseHandler(false, ErrorMsg('errorMsgNoBody'));
   }
-  //Else
-  //Destructuring the body
+
   const { name, brand, category, size, active, favorite } = newUser;
-  //Get the time
   const timestamp = 'now()';
-  //Add the new user to the data
   const sqlString = `INSERT into products (name,brand,category,size,active,favorite,timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`;
   const data = await query(sqlString, [
     name,
@@ -49,34 +50,3 @@ export async function createUser(newUser) {
   ]);
   return responseHandler(true, data.rows);
 }
-
-const responseHandler = (status, statusMsg) => {
-  return {
-    success: status,
-    payload: statusMsg,
-  };
-};
-
-const ErrorMsg = (errorMsg) => {
-  const filterError = errorMsgs.find((error) => error.name === errorMsg);
-  return filterError.response;
-};
-
-const checkBodyObjIsEmpty = (body) => {
-  return Object.keys(body).length === 0 ? true : false;
-};
-
-const checkIfItemExist = (data, id) => {
-  return !data.rowCount
-    ? responseHandler(false, notFound(id))
-    : responseHandler(true, data.rows);
-};
-
-//ERROR MSG
-const notFound = (id) => {
-  return {
-    code: 404,
-    status: 'Not found',
-    message: `We couldn't find the product with the id ${id}`,
-  };
-};
