@@ -9,12 +9,15 @@ export async function getAllProducts() {
 
 // GET PRODUCT BY ID
 export async function getProductByID(id) {
-  //Convert the id into a Number
+  //When we received the id param, we convert it into a Number
   const numericId = Number(id);
-  //Check if the converted ID is diferent to an integer
+  //If the converted id is not a valid integer,thrown an error
   if (Number.isNaN(numericId)) {
     return responseHandler(false, notValidId);
   } else {
+    if (numericId < 0 || numericId > 2147483647) {
+      return responseHandler(false, notValidRange);
+    }
     const sqlString = `SELECT * FROM  products WHERE id=$1`;
     const data = await query(sqlString, [id]);
     return checkIfItemExist(data, id);
@@ -78,6 +81,12 @@ const notValidId = {
   code: 400,
   status: 'Not a valid ID',
   message: 'The product id must be a valid number',
+};
+
+const notValidRange = {
+  code: 400,
+  status: 'Not a valid range',
+  message: 'Not a valid range for the ID',
 };
 const errorMsgNoBody = {
   code: 400,
