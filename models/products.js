@@ -8,7 +8,7 @@ import {
 
 // GET ALL PRODUCTS
 export async function getAllProducts() {
-  const data = await query(`SELECT * FROM  products;`);
+  const data = await query(`SELECT * FROM  products ORDER by id;`);
   return responseHandler(true, data.rows);
 }
 
@@ -52,27 +52,29 @@ export async function createProduct(newProduct) {
 }
 
 //UPDATE A PRODUCT
-export async function updateProductByID(id, newProduct) {
+export async function updateProductByID(id, updatedBody) {
   //If the object sent as body is empty, we return an error message
-  if (checkBodyObjIsEmpty(newProduct)) {
+  if (checkBodyObjIsEmpty(updatedBody)) {
     return responseHandler(false, ErrorMsg('errorMsgNoBody'));
   }
 
   //Convert the string id to a number
   let userId = Number(id);
   //Destructuring the body
-  const { first_name, last_name, email, catchphrase } = newProduct;
+  const { name, brand, category, size, active, favorite } = updatedBody;
   //Get the time
   const timestamp = 'now()';
   //Add the new user to the data
-  const sqlQuery = `UPDATE users SET first_name = $1,last_name=$2,email=$3,catchphrase=$4,timestamp=$6 WHERE id=$5  RETURNING *;`;
+  const sqlQuery = `UPDATE products SET name=$1,brand=$2,category=$3,size=$4,active=$5,favorite=$6,timestamp=$7 WHERE id=$8  RETURNING *;`;
   const data = await query(sqlQuery, [
-    first_name,
-    last_name,
-    email,
-    catchphrase,
-    userId,
+    name,
+    brand,
+    category,
+    size,
+    active,
+    favorite,
     timestamp,
+    userId,
   ]);
   return responseHandler(true, data.rows);
 }

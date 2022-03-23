@@ -4,6 +4,7 @@ import {
   getAllProducts,
   getProductByID,
   createProduct,
+  updateProductByID,
 } from '../models/products.js';
 import { requiredScopes } from 'express-oauth2-jwt-bearer';
 
