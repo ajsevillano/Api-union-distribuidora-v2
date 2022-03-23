@@ -3,7 +3,7 @@ const router = express.Router();
 import {
   getAllProducts,
   getProductByID,
-  createUser,
+  createProduct,
 } from '../models/products.js';
 import { requiredScopes } from 'express-oauth2-jwt-bearer';
 
@@ -23,14 +23,26 @@ router.get(`/:id`, requiredScopes('read:products'), async function (req, res) {
   res.json(resultbyId);
 });
 
-//ADD A NEW PRODUCT
+// ADD A NEW PRODUCT
 router.post(`/`, requiredScopes('read:products'), async function (req, res) {
   //Get the body from the params
   const postBody = req.body;
   //Call the function to add the new user
-  const newUser = await createUser(postBody);
+  const newProduct = await createProduct(postBody);
   //Return the response
-  res.json(newUser);
+  res.json(newProduct);
+});
+
+// UPDATE A PRODUCT
+router.put('/:id', requiredScopes('read:products'), async function (req, res) {
+  //Get the body from the params
+  const body = req.body;
+  //Get the id
+  const id = req.params.id;
+  //Call the function to add the new user
+  const updateUser = await updateProductByID(id, body);
+  //Return the response
+  res.json(updateUser);
 });
 
 export default router;

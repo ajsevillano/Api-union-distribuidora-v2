@@ -30,14 +30,14 @@ export async function getProductByID(id) {
 }
 
 // CREATE A NEW PRODUCT
-export async function createUser(newUser) {
-  const CheckbodyIsEmpty = checkBodyObjIsEmpty(newUser);
-  if (CheckbodyIsEmpty) {
+export async function createProduct(newProduct) {
+  const { name, brand, category, size, active, favorite } = newProduct;
+  const timestamp = 'now()';
+
+  if (checkBodyObjIsEmpty(newProduct)) {
     return responseHandler(false, ErrorMsg('errorMsgNoBody'));
   }
 
-  const { name, brand, category, size, active, favorite } = newUser;
-  const timestamp = 'now()';
   const sqlString = `INSERT into products (name,brand,category,size,active,favorite,timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`;
   const data = await query(sqlString, [
     name,
@@ -46,6 +46,32 @@ export async function createUser(newUser) {
     size,
     active,
     favorite,
+    timestamp,
+  ]);
+  return responseHandler(true, data.rows);
+}
+
+//UPDATE A PRODUCT
+export async function updateProductByID(id, newProduct) {
+  //If the object sent as body is empty, we return an error message
+  if (checkBodyObjIsEmpty(newProduct)) {
+    return responseHandler(false, ErrorMsg('errorMsgNoBody'));
+  }
+
+  //Convert the string id to a number
+  let userId = Number(id);
+  //Destructuring the body
+  const { first_name, last_name, email, catchphrase } = newProduct;
+  //Get the time
+  const timestamp = 'now()';
+  //Add the new user to the data
+  const sqlQuery = `UPDATE users SET first_name = $1,last_name=$2,email=$3,catchphrase=$4,timestamp=$6 WHERE id=$5  RETURNING *;`;
+  const data = await query(sqlQuery, [
+    first_name,
+    last_name,
+    email,
+    catchphrase,
+    userId,
     timestamp,
   ]);
   return responseHandler(true, data.rows);
