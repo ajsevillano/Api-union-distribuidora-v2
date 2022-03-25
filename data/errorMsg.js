@@ -31,4 +31,20 @@ export const errorMsgs = [
       message: `Only "category" filter is allowed`,
     },
   },
+  {
+    name: 'tooManyFilters',
+    response: {
+      code: 400,
+      status: `Only one filter`,
+      message: `This API only takes the filter category at this time`,
+    },
+  },
+  {
+    name: 'queryCantBeEmpty',
+    response: {
+      code: 400,
+      status: `The filter can't be empty`,
+      message: `The filter value can't be empty`,
+    },
+  },
 ];

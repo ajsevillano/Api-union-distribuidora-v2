@@ -17,7 +17,7 @@ router.get(`/`, requiredScopes('read:products'), async function (req, res) {
     const result = await getAllProducts();
     return res.json(result);
   }
-  const result = await getProductsByCategory(req.query);
+  const result = await getProductsByCategory(req.query, queryStringLength);
   return res.json(result);
 });
 
