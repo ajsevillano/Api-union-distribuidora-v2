@@ -3,30 +3,12 @@ import {
   responseHandler,
   ErrorMsg,
   checkBodyObjIsEmpty,
-  checkIfItemExist,
 } from '../libs/products.js';
 
 // GET ALL PRODUCTS
 export async function getAllProducts() {
   const data = await query(`SELECT * FROM  products ORDER by id;`);
   return responseHandler(true, data.rows);
-}
-
-// GET PRODUCT BY ID
-export async function getProductByID(id) {
-  const numericId = Number(id);
-  //If the converted id is not a valid integer:
-  if (Number.isNaN(numericId)) {
-    return responseHandler(false, ErrorMsg('notValidId'));
-  }
-  //If the id is not between the 0 & max integer value:
-  if (numericId < 0 || numericId > 2147483647) {
-    return responseHandler(false, ErrorMsg('notValidRange'));
-  }
-  //Return DB response
-  const sqlString = `SELECT * FROM  products WHERE id=$1`;
-  const data = await query(sqlString, [id]);
-  return checkIfItemExist(data, id);
 }
 
 // CREATE A NEW PRODUCT
