@@ -12,6 +12,18 @@ export async function getAllProducts() {
   return responseHandler(true, data.rows);
 }
 
+// GET PRODUCTS BY CATEGORY
+export async function getProductsByCategory(queryString) {
+  if (queryString.hasOwnProperty('category')) {
+    const queryFilter = queryString.category;
+    const sqlString = `SELECT * FROM  products WHERE category=$1;`;
+    const data = await query(sqlString, [queryFilter]);
+    return responseHandler(true, data.rows);
+  } else {
+    return responseHandler(false, ErrorMsg('errorInvalidFilter'));
+  }
+}
+
 // GET PRODUCT BY ID
 export async function getProductByID(id) {
   const numericId = Number(id);
@@ -60,11 +72,8 @@ export async function updateProductByID(id, updatedBody) {
 
   //Convert the string id to a number
   let userId = Number(id);
-  //Destructuring the body
   const { name, brand, category, size, active, favorite } = updatedBody;
-  //Get the time
   const timestamp = 'now()';
-  //Add the new user to the data
   const sqlQuery = `UPDATE products SET name=$1,brand=$2,category=$3,size=$4,active=$5,favorite=$6,timestamp=$7 WHERE id=$8  RETURNING *;`;
   const data = await query(sqlQuery, [
     name,
