@@ -1,4 +1,5 @@
 import query from '../db/index.js';
+import { categories } from '../data/categories.js';
 import {
   responseHandler,
   ErrorMsg,
@@ -27,6 +28,16 @@ export async function getProductsByCategory(queryString, queryStringLength) {
   //The filter can't be empty
   if (!Object.values(queryString)[0]) {
     return responseHandler(false, ErrorMsg('queryCantBeEmpty'));
+  }
+
+  //The filter value must be one of the valid values
+  if (!categories.includes(Object.values(queryString)[0])) {
+    return responseHandler(false, ErrorMsg('notaValidValue'));
+  }
+
+  //Return all the items if the category is all
+  if (Object.values(queryString)[0] === 'all') {
+    return getAllProducts();
   }
 
   //Return the filter

@@ -47,4 +47,12 @@ export const errorMsgs = [
       message: `The filter value can't be empty`,
     },
   },
+  {
+    name: 'notaValidValue',
+    response: {
+      code: 400,
+      status: `Not a valid value`,
+      message: `This is not a valid value for the filter category`,
+    },
+  },
 ];
