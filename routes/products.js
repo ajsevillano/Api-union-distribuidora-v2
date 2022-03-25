@@ -1,18 +1,14 @@
 import express from 'express';
 const router = express.Router();
-import {
-  getAllProducts,
-  createProduct,
-  updateProductByID,
-} from '../models/products.js';
+import { getAllProducts, createProduct } from '../models/products.js';
 import { requiredScopes } from 'express-oauth2-jwt-bearer';
 import { getProductsByCategory } from '../models/products/getProductsByCategory.js';
 import { getProductByID } from '../models/products/getProductByID.js';
+import { updateProductByID } from '../models/products/updateProductById.js';
 
 // GET ALL PRODUCTS & PRODUCTS FILTER BY CATEGORY
 router.get(`/`, requiredScopes('read:products'), async function (req, res) {
   const queryStringLength = Object.keys(req.query).length;
-
   if (!queryStringLength) {
     const result = await getAllProducts();
     return res.json(result);
