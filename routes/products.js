@@ -3,11 +3,11 @@ const router = express.Router();
 import {
   getAllProducts,
   getProductByID,
-  getProductsByCategory,
   createProduct,
   updateProductByID,
 } from '../models/products.js';
 import { requiredScopes } from 'express-oauth2-jwt-bearer';
+import { getProductsByCategory } from '../models/products/getProductsByCategory.js';
 
 // GET ALL PRODUCTS & PRODUCTS FILTER BY CATEGORY
 router.get(`/`, requiredScopes('read:products'), async function (req, res) {
