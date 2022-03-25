@@ -1,6 +1,6 @@
 import query from '../../db/index.js';
 import { categories } from '../../data/categories.js';
-import { getAllProducts } from '../products.js';
+import { getAllProducts } from './getAllProducts.js';
 import { responseHandler, ErrorMsg } from '../../libs/products.js';
 
 export async function getProductsByCategory(queryString, queryStringLength) {

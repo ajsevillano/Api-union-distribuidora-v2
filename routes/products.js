@@ -1,10 +1,13 @@
 import express from 'express';
 const router = express.Router();
-import { getAllProducts, createProduct } from '../models/products.js';
 import { requiredScopes } from 'express-oauth2-jwt-bearer';
+
+//Products models
+import { getAllProducts } from '../models/products/getAllProducts.js';
 import { getProductsByCategory } from '../models/products/getProductsByCategory.js';
 import { getProductByID } from '../models/products/getProductByID.js';
 import { updateProductByID } from '../models/products/updateProductById.js';
+import { createNewProduct } from '../models/products/createNewProduct.js';
 
 // GET ALL PRODUCTS & PRODUCTS FILTER BY CATEGORY
 router.get(`/`, requiredScopes('read:products'), async function (req, res) {
@@ -32,7 +35,7 @@ router.post(`/`, requiredScopes('create:products'), async function (req, res) {
   //Get the body from the params
   const postBody = req.body;
   //Call the function to add the new user
-  const newProduct = await createProduct(postBody);
+  const newProduct = await createNewProduct(postBody);
   //Return the response
   res.json(newProduct);
 });

@@ -1,18 +1,11 @@
-import query from '../db/index.js';
+import query from '../../db/index.js';
 import {
-  responseHandler,
-  ErrorMsg,
   checkBodyObjIsEmpty,
-} from '../libs/products.js';
+  ErrorMsg,
+  responseHandler,
+} from '../../libs/products.js';
 
-// GET ALL PRODUCTS
-export async function getAllProducts() {
-  const data = await query(`SELECT * FROM  products ORDER by id;`);
-  return responseHandler(true, data.rows);
-}
-
-// CREATE A NEW PRODUCT
-export async function createProduct(newProduct) {
+export async function createNewProduct(newProduct) {
   const { name, brand, category, size, active, favorite } = newProduct;
   const timestamp = 'now()';
 
