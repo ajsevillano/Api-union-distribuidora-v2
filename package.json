@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "node -r dotenv/config --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node ./bin/www.js",
     "dev": "nodemon -r dotenv/config ./bin/www.js",
     "dbcreateproductstable": "node  -r dotenv/config ./db/scripts/products/createProductsTable.js",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "dotenv": "^14.3.2",
     "jest": "^27.5.1",
-    "nodemon": "^1.11.1"
+    "nodemon": "^1.11.1",
+    "supertest": "^6.2.2"
   }
 }
