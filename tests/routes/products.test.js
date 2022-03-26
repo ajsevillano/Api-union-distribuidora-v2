@@ -1,9 +1,8 @@
 import request from 'supertest';
-import app from '../app.js';
+const app = 'http://localhost:4000';
 
-//TESTING DIFFERENT ROUTES FOR THE /products ENDPOIND
-describe('Test the routes for the /products endpoind', function () {
-  //TOKEN VALIDATIONS
+//TOKEN VALIDATIONS
+describe('CHECK valid token', () => {
   it('JWT Token is valid', async () => {
     await request(app)
       .get('/products')
@@ -19,8 +18,9 @@ describe('Test the routes for the /products endpoind', function () {
       .set('Authorization', `Bearer randoMTestToken`)
       .expect(401);
   });
+});
 
-  //RETURNING PRODUCTS
+describe('GET /products', () => {
   it('returns success when fetch /products endpoind', async () => {
     await request(app)
       .get('/products')
@@ -29,13 +29,13 @@ describe('Test the routes for the /products endpoind', function () {
       .expect(200);
   });
 
-  it('returns an error if route its not found', async () => {
+  it(`returns an error if route it's not found`, async () => {
     await request(app)
       .get('/productsTest')
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${process.env.TOKEN}`)
       .expect(404)
-      .expect(function (res) {
+      .expect((res) => {
         const actual = res.body;
         const expected = {
           error: {
@@ -47,9 +47,9 @@ describe('Test the routes for the /products endpoind', function () {
         expect(actual).toStrictEqual(expected);
       });
   });
+});
 
-  //products/:id ENDPOINT
-
+describe('GET /products/:id', () => {
   it('returns a product when call /id endpoind', async () => {
     await request(app)
       .get('/products/1')
@@ -64,7 +64,7 @@ describe('Test the routes for the /products endpoind', function () {
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${process.env.TOKEN}`)
       .expect(200)
-      .expect(function (res) {
+      .expect((res) => {
         const actual = res.body;
         const expected = {
           success: false,
@@ -84,7 +84,7 @@ describe('Test the routes for the /products endpoind', function () {
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${process.env.TOKEN}`)
       .expect(200)
-      .expect(function (res) {
+      .expect((res) => {
         const actual = res.body;
         const expected = {
           success: false,
@@ -104,7 +104,7 @@ describe('Test the routes for the /products endpoind', function () {
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${process.env.TOKEN}`)
       .expect(200)
-      .expect(function (res) {
+      .expect((res) => {
         const actual = res.body;
         const expected = {
           success: false,
@@ -124,7 +124,7 @@ describe('Test the routes for the /products endpoind', function () {
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${process.env.TOKEN}`)
       .expect(200)
-      .expect(function (res) {
+      .expect((res) => {
         const actual = res.body;
         const expected = {
           success: false,
