@@ -3,7 +3,7 @@ export const errorMsgs = [
     name: 'notValidId',
     response: {
       code: 400,
-      status: 'Not a valid ID',
+      status: 'Bad request',
       message: 'The product id must be a valid number',
     },
   },
@@ -11,7 +11,7 @@ export const errorMsgs = [
     name: 'notValidRange',
     response: {
       code: 400,
-      status: 'Not a valid range',
+      status: 'Bad request',
       message: 'Not a valid range for the ID',
     },
   },
