@@ -1,5 +1,5 @@
-//Express helpers
 import express from 'express';
+//Express middlewares
 import path from 'path';
 import __dirname from './dirname.js';
 import cookieParser from 'cookie-parser';

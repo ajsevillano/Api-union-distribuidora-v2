@@ -17,10 +17,13 @@ const productionConfigObject = {
   ssl: { rejectUnauthorized: false },
 };
 
-const pool = new pg.Pool(
-  process.env.PROJECT_ENV === 'dev' ? localConfigObject : productionConfigObject
-);
-
 export default function query(text, params) {
-  return pool.query(text, params);
+  const pool = new pg.Pool(
+    process.env.PROJECT_ENV === 'dev'
+      ? localConfigObject
+      : productionConfigObject
+  );
+  const res = pool.query(text, params);
+  pool.end();
+  return res;
 }

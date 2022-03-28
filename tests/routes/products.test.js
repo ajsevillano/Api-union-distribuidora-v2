@@ -1,5 +1,5 @@
 import request from 'supertest';
-const app = 'http://localhost:4000';
+import app from '../../app.js';
 
 //TOKEN VALIDATIONS
 describe('CHECK valid token', () => {
