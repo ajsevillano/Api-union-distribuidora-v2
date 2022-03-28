@@ -23,7 +23,7 @@ export const checkIfItemExist = (data, id) => {
 };
 
 //ERROR MSG
-const notFound = (id) => {
+export const notFound = (id) => {
   return {
     code: 404,
     status: 'Not found',
