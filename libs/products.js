@@ -17,13 +17,14 @@ export const checkBodyObjIsEmpty = (body) => {
 };
 
 export const checkIfItemExist = (data, id) => {
+  console.log(data.rowCount);
   return !data.rowCount
     ? responseHandler(false, notFound(id))
     : responseHandler(true, data.rows);
 };
 
 //ERROR MSG
-export const notFound = (id) => {
+const notFound = (id) => {
   return {
     code: 404,
     status: 'Not found',
